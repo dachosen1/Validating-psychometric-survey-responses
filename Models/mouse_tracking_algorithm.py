@@ -1,10 +1,8 @@
 import math
-import sys
 import time
-from datetime import datetime
 
+import pandas as pd
 from PyQt5.QtGui import QCursor
-from PyQt5.QtWidgets import QApplication
 
 
 class Frame:
@@ -41,20 +39,26 @@ class Frame:
 
 def distance(x1, y1, x2, y2):
     """
+    Calculates the euclidean distance between two vectors.
+
     #TODO: Document function
 
     :param x1:
     :param y1:
     :param x2:
     :param y2:
-    :return:
+    :return: Integer class object that represents the euclidean distance.
     """
 
     return math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2)
 
 
 def get_current_cursor_position():
-    # TODO: document function:
+    """
+    Function that returns coordinates of cursor position on screen.
+
+    :return x and y coordinate of cursor position:
+    """
     pos = QCursor.pos()
     return pos.x(), pos.y()
 
@@ -63,18 +67,48 @@ def get_current_frame():
     return Frame(get_current_cursor_position(), time.time())
 
 
-if __name__ == '__main__':
-    app = QApplication(sys.argv)
-    last_frame = get_current_frame()
-    begin = datetime.now()
+# if __name__ == '__main__':
+#     app = QApplication(sys.argv)
+#     last_frame = get_current_frame()
+#     begin = time.time()
 
-    Name = input()
-    Intention = input()
+user_name = 'Anderson Nelson'
+survey_objective = 'True'
 
-    while True:
-        new_frame = get_current_frame()
-        print(datetime.now(), new_frame.position)
+x_coord = []
+y_coord = []
 
-        time.sleep(1)
+name_list = []
+time_list = []
 
-# TODO: Write function that saves mouse movements in a csv file with users name
+survey_objective_list = []
+
+time_since_list = []
+
+while True:
+    new_frame = get_current_frame()
+    x_value = new_frame.position[0]
+    y_value = new_frame.position[1]
+
+    x_coord.append(x_value)
+    y_coord.append(y_value)
+
+    name_list.append(user_name)
+    survey_objective_list.append(survey_objective)
+
+    print('Compiled new coordinate mouse coordinate.....')
+
+    time.sleep(1)
+
+    mouse_tracking = pd.DataFrame(
+        {'User Name': name_list,
+         'Survey Object': survey_objective_list,
+         'x_coord': x_coord,
+         'y_coord': y_coord
+         }
+    )
+
+    print('Appended mouse coordinates to mouse_tracking data....')
+
+# save as a csv
+# mouse_tracking.to_csv('mouse_tracking_anderson.csv')
