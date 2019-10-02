@@ -107,12 +107,12 @@ while True:
     print('Appended mouse coordinates to mouse_tracking data....')
 
 mouse_tracking = pd.DataFrame(
-        {'User Name': name_list,
-         'Survey Object': survey_objective_list,
-         'x_coord': x_coord,
-         'y_coord': y_coord
-         }
-    )
+    {'User Name': name_list,
+     'Survey Object': survey_objective_list,
+     'x_coord': x_coord,
+     'y_coord': y_coord
+     }
+)
 
 # save as a csv
 mouse_tracking.to_csv('mouse_tracking_anderson.csv')
