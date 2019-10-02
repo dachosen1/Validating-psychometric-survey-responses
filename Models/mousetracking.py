@@ -53,9 +53,8 @@ class Frame:
     def get_current_cursor_position():
         """
         Function that returns coordinates of cursor position on screen.
-
         :return x and y coordinate of cursor position:
-        """
+          """
         pos = QCursor.pos()
         return pos.x(), pos.y()
 
