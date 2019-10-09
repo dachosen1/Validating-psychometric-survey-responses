@@ -4,8 +4,8 @@ library(tidyverse)
 
 # read data
 data_flat <- fread('Data/mouse-flat.csv')
-
-
+mouse_new_var <- fread('Data/mouse_new_var.csv')
+validation <- fread('Data/validations.csv')
 
 #------------------------------------------------------------------------ Action
 
@@ -19,10 +19,7 @@ action_count_wide <-
               names_from = 'action',
               values_from = 'Action Count')
 
-action_count_wide <-
-  colnames(action_count_wide) <-
-  c("user_id", "scroll count", "mouse movement count", "click count")
-
+colnames(action_count_wide) <-c("user_id", "scroll count", "mouse movement count", "click count")
 
 #------------------------------------------------------------------------ Time lapse
 # max time lapse per user
@@ -33,7 +30,18 @@ max_time <- data_flat[, .(`Max Time Lapse` = max(time_since)), by = user_id]
 # number of observations per user 
 user_record_count <- data_flat[, .(`User Record Count` = .N), by = user_id]
 
-
 #------------------------------------------------------------------------ Distance
-Mouse_movement_data <- fread("Data/Mouse_movement.csv")
+# total distance traveled by each  user 
+total_distance <- mouse_new_var[,.(`Total Distance` = .N), by = user_id]
+
+
+#------------------------------------------------------------------------ combination
+
+merged_data <- merge(x = action_count_wide, y = user_record_count, by = "user_id", all.x = TRUE)
+merged_data <- merge(x = merged_data, y = max_time, by = "user_id", all.x = TRUE)
+merged_data <- merge(x = merged_data, y = total_distance, by = "user_id", all.x = TRUE)
+merged_data <- merge(x = merged_data, y = validation, by = "user_id", all.x = TRUE)
+
+write.csv(merged_data, 'Data/Clean Data/Clean_data.csv')
+
 
