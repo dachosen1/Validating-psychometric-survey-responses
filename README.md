@@ -2,10 +2,21 @@
 Final Capstone Project for Columbia University 
 
 
-### Visualization 
+### **Problem Statement**
+**30% of users falsely fill out psychometric surveys**
 
-URL: https://sso.online.tableau.com/public/idp/SSO
+How can we validate these user survey responses?
 
-username: an2908@columbia.edu
+### Research Questions 
+**Mouse Activity:** How do we use user mouse activity to validate survey answers to psychometric questions? 
+**Response Time:** Does the variability in survey response time indicate suspicious behavior?
+**Survey Question:** Does the level of suspicious behavior vary across different types of survey questions?
 
-password: Dotin2019
+
+### Approach 
+Apply unsupervised & supervised learning techniques to identify users who exhibit suspicious behavior in survey completion
+
+### Expected Results
+- Create a model that outperforms current validation methods 
+- Indentify rates of Fraudulent Response
+- Reduce survey cost by at least 30%
