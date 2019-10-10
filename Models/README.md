@@ -26,5 +26,6 @@ movement followed by the user as our potential input features.
 - observations= ('clicks', 'movements', 'scrolls', 'votes_response')
 - start_probability= ('valid': avg x%, 'non-valid': avg y% )
 - transition_probability= ('valid': change in x%, 'non-valid': change in y% )
-- emission_probability=('valid': {'clicks': %, 'movements': %, 'scrolls': %, 'votes_response': %) 
+- emission_probability=('valid': {'clicks': %, 'movements': %, 'scrolls': %, 'votes_response': %}
+                        'non-valid': {'clicks': %, 'movements': %, 'scrolls': %, 'votes_response': %) 
 
