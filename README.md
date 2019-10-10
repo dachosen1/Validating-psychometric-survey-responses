@@ -1,4 +1,4 @@
-# Columbia-Castone
+# Columbia-Capstone
 Final Capstone Project for Columbia University 
 
 
