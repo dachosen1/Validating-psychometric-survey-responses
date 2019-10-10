@@ -7,13 +7,9 @@ from math import sqrt
 
 plt.rcParams.update({'figure.figsize': (10, 7), 'figure.dpi': 120})
 
-path = './Data/mouse-flat.csv'
-
+path = './Data/Clean Data/mouse_flat_v2.csv'
 
 data = pd.read_csv(path)
-data.rename(columns={'Unnamed: 0':'Index'},inplace=True)
-
-
 
 def index_per_ratio(data,ratio_x,ratio_y):
     l=[]
@@ -111,7 +107,6 @@ def distance(data):
 dist = distance(data)
 data.insert(loc=data.columns.get_loc('cord_y')+1,column='distance',value=dist)
 
-
 jj = []
 for r in range(len(max_min_df)):
     if max_min_df.cord_x[r] <150 and max_min_df.cord_y[r] <150:
@@ -119,21 +114,24 @@ for r in range(len(max_min_df)):
 
 #Detect Mobile Devices
 
-mobile_detect = pd.read_csv('/Users/luislosada/Columbia Drive/Capstone - Fall 2019/Project Data/Mobile_detection.csv')
+path2 = './Data/Extra/Mobile Aspect Ratio.csv'
+mobile_detect = pd.read_csv(path2)
 
-df['system'] = ""
+data['system'] = ""
 for sys in range(len(mobile_detect)):
-    df.system = np.where((df.window_x == mobile_detect.window_x[sys]) & (df.window_y == mobile_detect.window_y[sys]),
-             mobile_detect.OS[sys],df.system)
-df.system = np.where(df.system == "",
-         "pc", df.system)
+    data.system = np.where((data.window_x == mobile_detect.window_x[sys]) & (data.window_y == mobile_detect.window_y[sys]),
+             mobile_detect.OS[sys],data.system)
+data.system = np.where(data.system == "",
+         "pc", data.system)
 
-df['system'].value_counts(dropna=False)
-
-
-df.to_csv(r"mouse_new_var.csv",index=False)
+data['system'].value_counts(dropna=False)
 
 
-subset = df[df.user_id.isin([461, 598, 532, 530])]
-subset.to_csv(r"subset.csv",index=False)
+
+data.to_csv(r"./Data/Clean Data/mouse_flat_V3.csv",index=False)
+
+
+
+subset =data[['user_id','id','system']].drop_duplicates().reset_index(drop=True)
+subset.to_csv(r"./Data/Extra/uid_system.csv",index=False)
 
