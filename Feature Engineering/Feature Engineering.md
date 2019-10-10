@@ -11,6 +11,7 @@ These features are created on the user level and hence the values are aggregated
 | Mouse Activity Related  | Click Count  | Number of times a user has answered a question
 | Mouse Activity Related  | User Record Count | Number of times user has performed any mouse activity (scroll+moves+clicks)
 | Mouse Activity Related  | Validation   | Target Variable for supervised machine learning (boolean); classification modeling
+| Mouse Activity Related  | average_click_delay | Average time taken between one click and the next; aggregated by user
 | Time Related            | Max time lapsed | Total time taken by the user to complete the survey 
 | Distance Related        | Total Distance  | Total distance traveled by the user (Euclidean distance)
 | Distance Related        | Measure_width_covered | A feature to give us a measure of screen coverage by user in terms of width (x coordinate)
