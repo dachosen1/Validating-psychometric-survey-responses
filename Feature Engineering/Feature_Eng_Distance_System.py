@@ -1,15 +1,15 @@
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-import os
 import json
 from math import sqrt
 
-plt.rcParams.update({'figure.figsize': (10, 7), 'figure.dpi': 120})
-
+#Pre-proccesing, loading the data
 path = './Data/Clean Data/mouse_flat_v2.csv'
 
 data = pd.read_csv(path)
+
+#EDA Process of index per ratio (window x and window y)
 
 def index_per_ratio(data,ratio_x,ratio_y):
     l=[]
@@ -31,16 +31,21 @@ def index_per_ratio(data,ratio_x,ratio_y):
 
 data.iloc[3244067,]
 
+#List of all Unique combinations of window x,window y
 ins = data[['window_x',"window_y"]].drop_duplicates().sort_values(by="window_x")
 
+#Key creation of each combination of window_x and window_y
 str_windows = [str(ins.window_x.iloc[i])+"x"+str(ins.window_y.iloc[i]) for i in range(len(ins))]
+
+#creating the dictionary where the index of the last click per each aspect ratio combination is stored.
 myDict = dict.fromkeys(str_windows)
 for k in range(len(ins)):
     myDict[str_windows[k]]= index_per_ratio(data,ins.window_x.iloc[k],ins.window_y.iloc[k])
 
 data.loc[myDict['1440'],['user_id','id','radio','cord_x','cord_y']]#tests
 
-#Numpy Int to Int
+
+#Converting Numpy Int to Int
 od = myDict
 m=0
 for m in range(len(str_windows)):
@@ -50,7 +55,10 @@ for m in range(len(str_windows)):
 with open('last_c.json','w') as fp:
     json.dump(od, fp,indent=4)
 
-#what's the range
+
+#Creating a box to estimate where the next page button is located based on the last click per ratio and an expansion
+# of the error rate by 5%
+
 max_min_df = pd.DataFrame(index=od.keys(),columns=['count','max_x','max_y',"min_x","min_y",'range_x','range_y','window_x','window_y'])
 for w in od:
     max_min_df.loc[w, 'count'] = len(od[w])
@@ -86,7 +94,12 @@ df.action = np.where((data.window_x == 1600) & (data.window_y == 860) &
 
 to_ins = df[df.action != "m"][df.user_id == 365]
 
-#Distance
+jj = []
+for r in range(len(max_min_df)):
+    if max_min_df.cord_x[r] <150 and max_min_df.cord_y[r] <150:
+        jj.append(list(max_min_df.index)[r])
+
+#Creating the Distance Variable
 def distance(data):
     pl=[]
     clients = data['user_id'].unique()
@@ -98,7 +111,7 @@ def distance(data):
             pl.append(0)
             m=1
             while m < len(y):
-                dist = sqrt((y.cord_x.iloc[m]-y.cord_x.iloc[m-1])**2 + (y.cord_y.iloc[m]-y.cord_y.iloc[m-1])**2)
+                dist = sqrt((y.cord_x.iloc[m]-y.cord_x.iloc[m-1])**2 + (y.cord_y.iloc[m]-y.cord_y.iloc[m-1])**2) #distance formula between two points.
                 pl.append(dist)
                 m += 1
     return pl
@@ -107,12 +120,8 @@ def distance(data):
 dist = distance(data)
 data.insert(loc=data.columns.get_loc('cord_y')+1,column='distance',value=dist)
 
-jj = []
-for r in range(len(max_min_df)):
-    if max_min_df.cord_x[r] <150 and max_min_df.cord_y[r] <150:
-        jj.append(list(max_min_df.index)[r])
 
-#Detect Mobile Devices
+#Detect Mobile Devices using a csv of scrapped ratio aspects of known mobile devices
 
 path2 = './Data/Extra/Mobile Aspect Ratio.csv'
 mobile_detect = pd.read_csv(path2)
@@ -126,12 +135,6 @@ data.system = np.where(data.system == "",
 
 data['system'].value_counts(dropna=False)
 
-
-
-data.to_csv(r"./Data/Clean Data/mouse_flat_V3.csv",index=False)
-
-
-
+#Create a csv of all ids and their respective system
 subset =data[['user_id','id','system']].drop_duplicates().reset_index(drop=True)
 subset.to_csv(r"./Data/Extra/uid_system.csv",index=False)
-
