@@ -11,7 +11,6 @@ user_with_response <- fread('Data/Extra/users_with_absolute_response_features.cs
 mouse_direction <- fread('Data/Clean Data/mouse_user_direction.csv')
 
 #------------------------------------------------------------------------ Action
-
 # group by action and count the number of occurences 
 action_count <-
   data_flat[, .(`Action Count` = .N), by = c('user_id', 'action')]
@@ -33,22 +32,24 @@ colnames(action_count_wide) <-c("user_id", "scroll count", "mouse movement count
 max_time <- data_flat[, .(`Total Time` = max(time_since)), by = user_id]
 
 #------------------------------------------------------------------------ Number of records 
-# number of observations per user 
+# number of observations per user observation per user
 user_record_count <- data_flat[, .(`User Record Count` = .N), by = user_id]
 
 #------------------------------------------------------------------------ Distance
-# total distance traveled by each  user 
-total_distance <- mouse_new_var[,.(`Total Distance` = .N), by = user_id]
+# calculate the total distance traveled by each user 
+total_distance <- mouse_new_var[,.(`Total Distance` = sum(distance)), by = user_id]
 
 
 #------------------------------------------------------------------------ min and max 
-# total distance traveled by each  user 
+# calculate the min and max votes values per user id 
 min_score <- votes[,.(`Min Score Value` = min(score)), by = user_id]
 max_score <- votes[,.(`Max Score Value` = max(score)), by = user_id]
 
 
-
 #------------------------------------------------------------------------ votes
+
+# Aggregate each answers and record number 
+
 new_var <- str_split(votes$value, pattern = '_', simplify = TRUE)
 votes$question_type <- new_var[,1]
 
@@ -66,8 +67,9 @@ votes_wide <- pivot_wider(data = votes_clean_summarize, names_from = 'votes_cons
 
 votes_wide[is.na(votes_wide)] <- 0 
 
-
 #------------------------------------------------------------------------ Direction 
+# select varibles of interest from directions data 
+
 mouse_direction_subset <- 
   mouse_direction %>%
   select(
@@ -89,8 +91,10 @@ mouse_direction_subset <-
   )
 
 #------------------------------------------------------------------------ Add pc name 
+# add relevant pc names 
 pc.name <- data_flat%>%
   select(user_id,system)
+pc.name <- unique(pc.name)
 
 #------------------------------------------------------------------------ combination
 
@@ -104,6 +108,7 @@ merged_data <- merge(x = merged_data, y = min_score, by = "user_id", all.x = TRU
 merged_data <- merge(x = merged_data, y = votes_wide, by = "user_id", all.x = TRUE)
 merged_data <- merge(x = merged_data, y = mouse_direction_subset, by = "user_id", all.x = TRUE)
 merged_data <- merge(x = merged_data, y = pc.name, by = "user_id", all.x = TRUE)
+merged_data[is.na(merged_data)] <- 0 
 
 write.csv(merged_data, 'Data/Clean Data/merged_data_user_level.csv')
 
