@@ -10,6 +10,23 @@ votes <- fread('Data/Clean Data/votes_v2.csv')
 user_with_response <- fread('Data/Extra/users_with_absolute_response_features.csv')
 mouse_direction <- fread('Data/Clean Data/mouse_user_direction.csv')
 
+
+
+#------------------------------------------------------------------------Add Speed 
+data_flat <- data_flat[, `Speed`:= distance/time_since]
+data_flat[is.na(data_flat$Speed)]$Speed <- 0
+data_flat[data_flat$Speed == 'Inf'] <- 0
+
+write.csv(data_flat, 'Data/Clean Data/mouse_flat_v2.csv')
+
+# speed metrics 
+
+speed_metrics <- data_flat[, .(`Max Speed` = max(Speed), 
+              `Avg Speed` = mean(Speed), 
+              `Sd Speed` = sd(Speed)),
+              by = user_id]
+
+
 #------------------------------------------------------------------------ Action
 # group by action and count the number of occurences 
 action_count <-
@@ -107,6 +124,8 @@ merged_data <- merge(x = merged_data, y = max_score, by = "user_id", all.x = TRU
 merged_data <- merge(x = merged_data, y = votes_wide, by = "user_id", all.x = TRUE)
 merged_data <- merge(x = merged_data, y = mouse_direction_subset, by = "user_id", all.x = TRUE)
 merged_data <- merge(x = merged_data, y = pc.name, by = "user_id", all.x = TRUE)
+merged_data <- merge(x = merged_data, y = speed_metrics, by = "user_id", all.x = TRUE)
+
 merged_data[is.na(merged_data)] <- 0 
 
 write.csv(merged_data, 'Data/Clean Data/merged_data_user_level.csv')
