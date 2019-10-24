@@ -51,18 +51,18 @@ m=0
 for m in range(len(str_windows)):
     od[str_windows[m]]= list(map(int, od[str_windows[m]]))
 
-#Saving for later Use
+# Saving for later Use
 with open('last_c.json','w') as fp:
-    json.dump(od, fp,indent=4)
+    json.dump(od, fp, indent=4)
 
 
-#Creating a box to estimate where the next page button is located based on the last click per ratio and an expansion
+# Creating a box to estimate where the next page button is located based on the last click per ratio and an expansion
 # of the error rate by 5%
 
 max_min_df = pd.DataFrame(index=od.keys(),columns=['count','max_x','max_y',"min_x","min_y",'range_x','range_y','window_x','window_y'])
 for w in od:
     max_min_df.loc[w, 'count'] = len(od[w])
-    #Min Max *1.05
+    # Min Max *1.05
     ux = data.loc[od[w], 'cord_x'].describe()['max']
     uy = data.loc[od[w], 'cord_y'].describe()['max']
     mx = data.loc[od[w], 'cord_x'].describe()['min']
