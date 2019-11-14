@@ -5,8 +5,8 @@ import re
 
 #Pre-proccesing, loading the data
 path = './Data/Clean Data/mouse_flat_V3.csv'
-path_dup = './Data/Raw/mouse_paths.csv'
-data = pd.read_csv(path,index_col=0)
+path_dup = '/Users/luislosada/PycharmProjects/Dotin-Columbia-Castone-Team-Alpha/Data/Raw/mouse_paths.csv'
+data = pd.read_csv("/Users/luislosada/PycharmProjects/Dotin-Columbia-Castone-Team-Alpha/Data/Clean Data/mouse_flat_V3.csv",index_col=0)
 data.replace(np.nan, 'NoValue', regex=True,inplace=True)
 len(data)
 
@@ -120,7 +120,8 @@ ii_2 = [list(item) for sublist in ii for item in sublist]
 ii_3 = [item for sublist in ii_2 for item in sublist]
 
 good_user = rr_df.iloc[ii_3,:].reset_index(drop=True)
-
+list_good_user = good_user.user_id.drop_duplicates().reset_index(drop=True)
+list_good_user.to_csv('/Users/luislosada/PycharmProjects/Dotin-Columbia-Castone-Team-Alpha/Data/Extra/List_Good_User.csv')
 #Now finally adding direction to the data frame based on their x and y coordinates.
 def add_direction(dd):
     for i in range(len(dd)):
