@@ -84,7 +84,7 @@ plt.show()
 
 df_test = test_x.copy()
 df_test['score'] = y_test_scores
-df_test['cluster'] = np.where(df_test['score']<8, 0, 1)
+df_test['cluster'] = np.where(df_test['score'] < 8, 1, 0)
 df_test['cluster'].value_counts()
 
 suspicious = df_test[(df_test['cluster'] == 1)]
@@ -130,3 +130,5 @@ plt.xlabel('PC1',fontsize = 20)
 plt.ylabel('PC2',fontsize = 20)
 plt.legend(prop={'size': 20})
 plt.show()
+
+df_test.to_csv("DF_autoenc.csv")
