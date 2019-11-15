@@ -48,12 +48,12 @@ for a in data['user_id']:
 train_index = [item for sublist in [item for sublist in ix for item in sublist] for item in sublist]
 test_index = [item for item in list(data.index) if item not in train_index]
 
-train = data.loc[train_index,df.columns].reset_index(drop=True)
-test = data.loc[test_index,df.columns].reset_index(drop=True)
+train = data.loc[train_index, df.columns].reset_index(drop=False)
+test = data.loc[test_index, df.columns].reset_index(drop=False)
 train = train.apply(pd.to_numeric)
 test = test.apply(pd.to_numeric)
-train_x = train.drop(columns='user_id')
-test_x = test.drop(columns='user_id')
+train_x = train.drop(columns=['user_id', 'index'])
+test_x = test.drop(columns=['user_id', 'index'])
 
 np.any(np.isnan(train_x))
 np.all(np.isfinite(train_x))
@@ -83,6 +83,7 @@ plt.xlim(-1, 2)
 plt.show()
 
 df_test = test_x.copy()
+df_test.insert(loc=0, column="user_id", value=test.dropna()['user_id'])
 df_test['score'] = y_test_scores
 df_test['cluster'] = np.where(df_test['score'] < 8, 1, 0)
 df_test['cluster'].value_counts()
