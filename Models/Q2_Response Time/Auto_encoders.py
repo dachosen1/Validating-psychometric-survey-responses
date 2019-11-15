@@ -1,14 +1,11 @@
-
-import pandas as pd
 import os
-import numpy as np
-from pyod.models.auto_encoder import AutoEncoder
-from sklearn.model_selection import train_test_split
+
 import matplotlib.pyplot as plt
-from pyod.models.combination import average, maximization
-from sklearn.preprocessing import StandardScaler, normalize
+import numpy as np
+import pandas as pd
+from pyod.models.auto_encoder import AutoEncoder
 from sklearn.decomposition import PCA
-import seaborn as sns
+from sklearn.preprocessing import StandardScaler, normalize
 
 os.chdir("/Users/luislosada/Columbia Drive/Capstone - Fall 2019/Project Data")
 data = pd.read_csv("final_outliers (1).csv",index_col=0).reset_index(drop=True)
@@ -132,3 +129,4 @@ plt.title("Outliers Identified With an Autoencoder",fontsize = 30)
 plt.xlabel('PC1',fontsize = 20)
 plt.ylabel('PC2',fontsize = 20)
 plt.legend(prop={'size': 20})
+plt.show()
