@@ -3,6 +3,7 @@ from __future__ import print_function, division
 from builtins import range
 
 import numpy as np
+import matplotlib.pyplot as plt
 from datetime import datetime
 
 
@@ -101,6 +102,8 @@ class HMM:
 			self.output_distribution = b_num / den2
 
 		print("Fit duration:", (datetime.now() - t0))
+		plt.plot(cost)
+		plt.show()
 
 	def log_likelihood(self, x):
 		""""
