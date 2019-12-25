@@ -101,9 +101,9 @@ class HMM:
 			self.state_transition_matrix = a_num / den1
 			self.output_distribution = b_num / den2
 
-		print("Fit duration:", (datetime.now() - t0))
-		plt.plot(cost)
-		plt.show()
+# 		print("Fit duration:", (datetime.now() - t0))
+# 		plt.plot(cost)
+# 		plt.show()
 
 	def log_likelihood(self, x):
 		""""
