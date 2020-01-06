@@ -1,13 +1,14 @@
+import re
+from math import sqrt
+
 import numpy as np
 import pandas as pd
-from math import sqrt
-import re
 
-#Pre-proccesing, loading the data
+# Pre-proccesing, loading the data
 path = './Data/Clean Data/mouse_flat_V3.csv'
 path_dup = './Data/Raw/mouse_paths.csv'
-data = pd.read_csv(path,index_col=0)
-data.replace(np.nan, 'NoValue', regex=True,inplace=True)
+data = pd.read_csv(path, index_col = 0)
+data.replace(np.nan, 'NoValue', regex = True, inplace = True)
 len(data)
 
 #Removing Duplicate ids, we need to do some cleaning up to decide which survey we will use for each duplicate ID
@@ -70,9 +71,10 @@ def scale_distance(df):
              index=[item for sublist in ll[1] for item in sublist])
     return pp
 
+
 scaled_cords = scale_distance(radio_DF)
-rr_df = radio_DF.join(scaled_cords)
-rr_df['scaled_distance'] = np.array(np.where(rr_df.distance == 0,0,rr_df.scaled_distance)).tolist()
+rr_df = radio_DF
+rr_df['scaled_distance'] = np.array(np.where(rr_df.distance == 0, 0, rr_df.scaled_distance)).tolist()
 
 
 # In order to capture page changes I have a list of all Radio buttons of the first question in each page
