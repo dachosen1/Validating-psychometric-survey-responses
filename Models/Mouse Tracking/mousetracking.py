@@ -1,7 +1,11 @@
 import math
+import sys
 import time
+from datetime import date
 
+import pandas as pd
 from PyQt5.QtGui import QCursor
+from PyQt5.QtWidgets import QApplication
 
 
 def distance(x1, y1, x2, y2):
@@ -54,3 +58,66 @@ class Frame:
             return None
         else:
             return d / time_delta
+
+
+""""
+Mouse movement tracker 
+The purpose of program is to track the mouse movements of team alpha taking the dotin survey. 
+Step 1: Run the below script and type your name, survey objective, and survey part 
+Step 2: The program will start to record mouse movement
+Step 3: Once your done taking the survey, click the stop button on jupyter notebook 
+Step 4: Run the mouse tracking PD data frame, and save it as a CSV
+Note: Restart the Kernel and Clear the output after each run
+"""
+
+if __name__ == '__main__':
+    app = QApplication(sys.argv)
+
+    user_name = input('Please type your name')
+    survey_objective = input('Please type the survey objective: Accurate or False')
+    survey_part = input('Please indcate which part of the survey you are taking')
+
+    x_coord = []
+    y_coord = []
+
+    name_list = []
+    time_list = []
+
+    date_today = date.today()
+    survey_objective_list = []
+    time_since_list = []
+
+    begin = time.time()
+
+    while True:
+        try:
+            new_frame = get_current_cursor_position()
+            x_value = new_frame[0]
+            y_value = new_frame[1]
+
+            x_coord.append(x_value)
+            y_coord.append(y_value)
+
+            current_time = time.time()
+            time_since = current_time - begin
+
+            time_since_list.append(time_since)
+
+            time.sleep(0.5)
+            print('Appended mouse coordinates to mouse_tracking data....')
+        except KeyboardInterrupt:
+            break
+
+    mouse_tracking = pd.DataFrame(
+        {'User Name': user_name,
+         'Date': date_today,
+         'Survey Object': survey_objective,
+         'x_coord': x_coord,
+         'y_coord': y_coord,
+         'Time Since': time_since_list,
+         'Survey Part': survey_part
+         }
+    )
+
+    # save as a csv
+    mouse_tracking.to_csv(f'../Data/Team Survey Data/mouse_tracking_{user_name}_{survey_objective}_{survey_part}.csv')
