@@ -16,7 +16,6 @@ How can we validate these user survey responses?
 ### Approach 
 Apply unsupervised & supervised learning techniques to identify users who exhibit suspicious behavior in survey completion
 
-### Expected Results
-- Create a model that outperforms current validation methods 
-- Indentify rates of Fraudulent Response
-- Reduce survey cost by at least 30%
+
+Paper: https://arxiv.org/abs/2006.14054
+
